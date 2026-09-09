@@ -1,5 +1,5 @@
 # --- Build stage: compiles the app using a full Gradle installation ---
-FROM gradle:8.10-jdk17 AS build
+FROM gradle:9-jdk17 AS build
 WORKDIR /app
 COPY build.gradle settings.gradle ./
 COPY src ./src
