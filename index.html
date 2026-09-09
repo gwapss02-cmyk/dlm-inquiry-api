@@ -551,7 +551,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
-    fetch('https://dlm-inquiry-api.onrender.com/api/inquiries', {
+    fetch('/api/inquiries', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, company, email, phone, service, message })
