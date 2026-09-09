@@ -5,11 +5,16 @@ let transporter;
 function getTransporter() {
   if (!transporter) {
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // true for port 465
       auth: {
-        user: process.env.GMAIL_USER,       // your full Gmail address
+        user: process.env.GMAIL_USER,        // your full Gmail address
         pass: process.env.GMAIL_APP_PASSWORD, // 16-character Gmail App Password
       },
+      connectionTimeout: 8000, // fail fast instead of hanging
+      greetingTimeout: 8000,
+      socketTimeout: 8000,
     });
   }
   return transporter;
@@ -59,7 +64,7 @@ ${message || '-'}
 
     return res.status(200).json({ status: 'sent' });
   } catch (err) {
-    console.error('Unexpected error:', err);
+    console.error('Email send error:', err);
     return res.status(500).json({ status: 'error', message: 'Could not send email. Please try again later.' });
   }
 }
