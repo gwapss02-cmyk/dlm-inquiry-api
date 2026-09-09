@@ -553,24 +553,57 @@
     submitBtn.textContent = 'Sending...';
 
 fetch('https://dlm-inquiry-api.vercel.app/api/inquiries', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, company, email, phone, service, message })
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Request failed');
-        return res.json();
-      })
-      .then(function () {
-        document.getElementById('formFields').style.display = 'none';
-        document.getElementById('formSuccess').classList.add('show');
-      })
-      .catch(function () {
-        errorEl.textContent = 'Something went wrong sending your inquiry. Please try again in a moment.';
-        errorEl.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-      });
+
+Your complete request should look like this:
+
+fetch('https://dlm-inquiry-api.vercel.app/api/inquiries', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  body: JSON.stringify({
+    name,
+    company,
+    email,
+    phone,
+    service,
+    message
+  })
+})
+  .then(function (res) {
+    return res.text().then(function (text) {
+      let data = {};
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = { message: text };
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          data.message || data.error || `Request failed with status ${res.status}`
+        );
+      }
+
+      return data;
+    });
+  })
+  .then(function () {
+    document.getElementById('formFields').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  })
+  .catch(function (error) {
+    console.error('Inquiry error:', error);
+
+    errorEl.textContent =
+      error.message || 'Something went wrong sending your inquiry.';
+    errorEl.style.display = 'block';
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+  });
   });
 </script>
 
