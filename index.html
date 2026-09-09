@@ -494,26 +494,6 @@
           </div>
 
           <div class="form-success" id="formSuccess">
-            <div class="check">✓</div>
-            <h3>Inquiry received</h3>
-            <p>Thanks for reaching out — a member of our team will follow up within 48 hours.</p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap footer-inner">
-    <div>© 2026 DLM Tax & Accounting Services. All rights reserved.</div>
-    <div style="display:flex; gap:20px;">
-      <a href="#services">Services</a>
-      <a href="#inquiry">Contact</a>
-    </div>
-  </div>
-</footer>
-
 <script>
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
@@ -552,11 +532,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
-fetch('https://dlm-inquiry-api.vercel.app/api/inquiries', {
-
-Your complete request should look like this:
-
-   fetch('https://dlm-inquiry-api./api/inquiries', {
+    fetch('https://dlm-inquiry-api.onrender.com/api/inquiries', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, company, email, phone, service, message })
@@ -576,7 +552,27 @@ Your complete request should look like this:
         submitBtn.textContent = originalBtnText;
       });
   });
-</script>
+</script>           
+            <div class="check">✓</div>
+            <h3>Inquiry received</h3>
+            <p>Thanks for reaching out — a member of our team will follow up within 48 hours.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>© 2026 DLM Tax & Accounting Services. All rights reserved.</div>
+    <div style="display:flex; gap:20px;">
+      <a href="#services">Services</a>
+      <a href="#inquiry">Contact</a>
+    </div>
+  </div>
+</footer>
+
 
 </body>
 </html>
