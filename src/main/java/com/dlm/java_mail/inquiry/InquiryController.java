@@ -25,7 +25,7 @@ public class InquiryController {
             return ResponseEntity.ok(Map.of("status", "sent"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("status", "error", "message", "Could not send email. Please try again later."));
+                    .body(Map.of("status", "error", "message", "DEBUG: " + e.getMessage()));
         }
     }
 }
