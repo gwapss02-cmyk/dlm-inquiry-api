@@ -584,15 +584,15 @@
       });
   });
 
-  // Animate the "Why clients stay with us" stats when they scroll into view
+  // Animate the "Why clients stay with us" stats every time they scroll into view
   const statEls = document.querySelectorAll('.stat');
   const statObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
+      const figure = entry.target.querySelector('.figure');
       if (entry.isIntersecting) {
         entry.target.classList.add('in-view');
-        const figure = entry.target.querySelector('.figure');
-        if (figure && !figure.dataset.animated) {
-          figure.dataset.animated = 'true';
+        if (figure && !figure.dataset.animating) {
+          figure.dataset.animating = 'true';
           const target = parseInt(figure.getAttribute('data-count'), 10);
           const suffix = figure.getAttribute('data-suffix') || '';
           const duration = 900;
@@ -602,11 +602,16 @@
             const eased = 1 - Math.pow(1 - progress, 3);
             const current = Math.round(eased * target);
             figure.textContent = current + suffix;
-            if (progress < 1) requestAnimationFrame(tick);
+            if (progress < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              figure.dataset.animating = '';
+            }
           }
           requestAnimationFrame(tick);
         }
-        statObserver.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove('in-view');
       }
     });
   }, { threshold: 0.3 });
