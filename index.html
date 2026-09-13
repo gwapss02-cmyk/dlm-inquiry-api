@@ -83,6 +83,11 @@
     padding: 90px 0 100px;
     position: relative;
     overflow: hidden;
+    min-height: calc(100vh + 20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
   }
   .hero::after {
     content: "";
@@ -253,6 +258,10 @@
       min-height: auto;
       display: block;
     }
+    .hero {
+      min-height: auto;
+      display: block;
+    }
 
     .nav { padding: 14px 0; flex-wrap: nowrap; }
     .nav-toggle { display: block; order: 2; }
@@ -305,6 +314,22 @@
     .logo .logo-text .lt-sub { font-size: 9px; }
     .hero h1 { font-size: 24px; }
     .why-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
+
+  /* Back to top button */
+  #backToTop {
+    position: fixed; right: 24px; bottom: 24px; z-index: 30;
+    width: 46px; height: 46px; border-radius: 50%; border: none;
+    background: var(--navy); color: var(--white); font-size: 20px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+  #backToTop.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  #backToTop:hover { background: var(--navy-deep); }
+  @media (max-width: 760px) {
+    #backToTop { right: 16px; bottom: 16px; width: 42px; height: 42px; font-size: 18px; }
   }
 
   /* Footer */
@@ -616,6 +641,18 @@
     });
   }, { threshold: 0.3 });
   statEls.forEach(function (el) { statObserver.observe(el); });
+  // Back to top button
+  const backToTopBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > window.innerHeight * 0.6) {
+      backToTopBtn.classList.add('show');
+    } else {
+      backToTopBtn.classList.remove('show');
+    }
+  });
+  backToTopBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 </script>           
             <div class="check">✓</div>
             <h3>Inquiry received</h3>
@@ -636,6 +673,8 @@
     </div>
   </div>
 </footer>
+
+<button id="backToTop" aria-label="Back to top" title="Back to top">&uarr;</button>
 
 
 </body>
