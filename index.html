@@ -55,12 +55,14 @@
     color: var(--gold); text-transform: uppercase;
   }
   .nav-links { display: flex; gap: 32px; font-size: 14px; color: var(--slate); order: 2; }
+  .nav-links a { transition: color 0.2s ease; }
   .nav-links a:hover { color: var(--navy); }
   .nav-cta {
     background: var(--navy); color: var(--white); padding: 10px 22px;
     border-radius: 3px; font-size: 14px; white-space: nowrap; order: 3;
+    transition: background 0.2s ease, transform 0.2s ease;
   }
-  .nav-cta:hover { background: var(--navy-deep); }
+  .nav-cta:hover { background: var(--navy-deep); transform: translateY(-1px); }
   .nav-links-cta { display: none; }
   .nav-toggle {
     display: none; background: none; border: none; cursor: pointer;
@@ -102,13 +104,15 @@
   .btn-primary {
     background: var(--gold); color: var(--white); padding: 13px 28px;
     border-radius: 3px; font-size: 15px; display: inline-block;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .btn-primary:hover { background: var(--gold-light); }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
   .btn-secondary {
     border: 1px solid rgba(255,255,255,0.4); color: var(--white);
     padding: 13px 28px; border-radius: 3px; font-size: 15px; display: inline-block;
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
   }
-  .btn-secondary:hover { border-color: var(--white); }
+  .btn-secondary:hover { border-color: var(--white); transform: translateY(-2px); background: rgba(255,255,255,0.08); }
 
   /* Ledger divider */
   .ledger-rule {
@@ -134,7 +138,9 @@
   .service-card {
     background: var(--white); border: 1px solid var(--border); border-radius: 4px;
     padding: 28px 24px; border-top: 3px solid var(--navy);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
+  .service-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.08); }
   .service-card .num {
     font-family: Georgia, serif; font-size: 13px; color: var(--gold);
     letter-spacing: 1px; margin-bottom: 12px; display: block;
@@ -204,8 +210,9 @@
     background: var(--navy); color: var(--white); border: none;
     padding: 13px 30px; border-radius: 3px; font-size: 15px; cursor: pointer;
     width: 100%; font-family: inherit;
+    transition: background 0.2s ease, transform 0.2s ease;
   }
-  .submit-btn:hover { background: var(--navy-deep); }
+  .submit-btn:hover { background: var(--navy-deep); transform: translateY(-1px); }
   .form-note { font-size: 12px; color: var(--slate-light); margin-top: 12px; text-align: center; }
   .form-success {
     display: none; text-align: center; padding: 40px 20px;
