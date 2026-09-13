@@ -159,6 +159,17 @@
     font-family: Georgia, serif; font-size: 34px; color: var(--navy); margin-bottom: 6px;
   }
   .stat .label { font-size: 14px; color: var(--slate-light); }
+  .stat {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .stat.in-view {
+    opacity: 1; transform: translateY(0);
+  }
+  .stat:nth-child(1) { transition-delay: 0s; }
+  .stat:nth-child(2) { transition-delay: 0.1s; }
+  .stat:nth-child(3) { transition-delay: 0.2s; }
+  .stat:nth-child(4) { transition-delay: 0.3s; }
 
   /* Process */
   .process-list { display: grid; gap: 22px; max-width: 640px; }
@@ -374,19 +385,19 @@
     <h2 class="section-title">A firm that treats your books like our own</h2>
     <div class="why-grid" style="margin-top: 20px;">
       <div class="stat">
-        <div class="figure">15+</div>
+        <div class="figure" data-count="15" data-suffix="+">0+</div>
         <div class="label">Years serving small and mid-sized businesses</div>
       </div>
       <div class="stat">
-        <div class="figure">120+</div>
+        <div class="figure" data-count="120" data-suffix="+">0+</div>
         <div class="label">Businesses currently under engagement</div>
       </div>
       <div class="stat">
-        <div class="figure">48 hr</div>
+        <div class="figure" data-count="48" data-suffix=" hr">0 hr</div>
         <div class="label">Typical response time on inquiries</div>
       </div>
       <div class="stat">
-        <div class="figure">100%</div>
+        <div class="figure" data-count="100" data-suffix="%">0%</div>
         <div class="label">Engagements handled by licensed accountants</div>
       </div>
     </div>
@@ -559,6 +570,34 @@
         submitBtn.textContent = originalBtnText;
       });
   });
+
+  // Animate the "Why clients stay with us" stats when they scroll into view
+  const statEls = document.querySelectorAll('.stat');
+  const statObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        const figure = entry.target.querySelector('.figure');
+        if (figure && !figure.dataset.animated) {
+          figure.dataset.animated = 'true';
+          const target = parseInt(figure.getAttribute('data-count'), 10);
+          const suffix = figure.getAttribute('data-suffix') || '';
+          const duration = 900;
+          const start = performance.now();
+          function tick(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(eased * target);
+            figure.textContent = current + suffix;
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  statEls.forEach(function (el) { statObserver.observe(el); });
 </script>           
             <div class="check">✓</div>
             <h3>Inquiry received</h3>
