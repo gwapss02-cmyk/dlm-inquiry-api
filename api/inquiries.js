@@ -1,36 +1,51 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).json({ status: 'error', message: 'Method not allowed' });
+  }
+
+  const { name, company, email, phone, service, message } = req.body || {};
+
+  if (!name || !email || !service) {
+    return res.status(400).json({ status: 'error', message: 'Missing required fields' });
+  }
+
+  const textContent = `New inquiry received from the website:
+
+Name:    ${name}
+Company: ${company || '-'}
+Email:   ${email}
+Phone:   ${phone || '-'}
+Service: ${service}
+
+Message:
+${message || '-'}
+`;
+
   try {
-    console.log("ENV GMAIL_USER present:", !!process.env.GMAIL_USER);
-    console.log("ENV INQUIRY_NOTIFY_TO present:", !!process.env.INQUIRY_NOTIFY_TO);
-
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_APP_PASSWORD,
       },
-      // optional debug
-      logger: true,
-      debug: true,
     });
 
-    // verify connection configuration
-    await transporter.verify();
-    console.log("Transporter verified");
-
-    const info = await transporter.sendMail({
-      from: process.env.GMAIL_USER,
+    await transporter.sendMail({
+      from: process.env.MAIL_USERNAME,
       to: process.env.INQUIRY_NOTIFY_TO,
-      subject: `New inquiry from ${req.body.name || "website"}`,
-      text: JSON.stringify(req.body, null, 2),
+      replyTo: email,
+      subject: `New inquiry from ${name}`,
+      text: textContent,
     });
 
-    console.log("sendMail info:", info);
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ status: 'sent' });
   } catch (err) {
-    console.error("Email send error:", err && err.stack ? err.stack : err);
-    return res.status(500).json({ error: "email_error", message: String(err) });
+    console.error('Mail error:', err);
+    return res.status(500).json({ status: 'error', message: 'Could not send email. Please try again later.' });
   }
 }
